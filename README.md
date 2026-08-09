@@ -1,24 +1,26 @@
 # EEVEON Flow
 
-Record a browser workflow. Replay it, or hand it to an agent.
+Record a browser workflow. Replay it, schedule it, or hand it to an agent.
 
 You click through a task once — search a site, fill a form, pull a report. EEVEON Flow
 watches, folds the hundreds of raw browser events into the handful of steps a person would
 actually describe, and compiles them into **Flow JSON**. From there you can replay it in the
-same tab with approval gates on the risky steps, or export it as a `SKILL.md` for an agent
-runtime or a Playwright spec for CI.
+same tab with approval gates on the risky steps, schedule it to run on its own, or export it
+as a `SKILL.md` for an agent runtime or a Playwright spec for CI.
 
-Everything runs locally. No account, no server, no cloud.
+Everything runs locally. No account, no server, no cloud — themed to match the rest of the
+EEVEON product line.
 
 ## Status
 
-MVP — recording, compiling, replaying, and exporting all work end to end.
+Recording, compiling, replaying, exporting, and scheduled automations all work end to end.
+Subscription billing is not built — see [Not in this build](#not-in-this-build).
 
 | | |
 |---|---|
-| Tests | 73 passing |
+| Tests | 93 passing |
 | Typecheck | clean (`tsc --noEmit`) |
-| Build | 3 bundles: sidepanel 267 kB, worker 102 kB, content script 11 kB |
+| Build | 4 bundles: sidepanel 277 kB, dashboard 277 kB, worker 111 kB, content script 11 kB |
 
 ## Install
 
@@ -28,7 +30,8 @@ npm run build
 ```
 
 Then `chrome://extensions` → enable Developer Mode → **Load unpacked** → pick `dist/`.
-Click the toolbar icon to open the side panel.
+Click the toolbar icon to open the side panel, or the **Dashboard** button in it for the
+full-tab view (manage every saved flow, secrets, and automations in one place).
 
 ## Use
 
@@ -114,6 +117,32 @@ Known limitation: an MV3 service worker can be killed after ~30s idle with no ex
 call in flight. A very slow page mid-`wait` step could in theory stall a run; a keepalive
 alarm would close that gap if it becomes a problem in practice.
 
+## Automations
+
+The dashboard's **Secrets** and **Automations** sections (per selected flow) turn a one-off
+replay into something that runs on its own:
+
+- **Secrets** ([`src/background/vault.ts`](src/background/vault.ts)) — a flow's required
+  password/API-key variables get an AES-GCM–encrypted entry in `chrome.storage.local`, keyed
+  by flow + variable name. The key is generated once and stored alongside the ciphertext —
+  no passphrase, no unlock step. That stops a casual read of the extension's on-disk storage
+  from handing over plaintext credentials; it does **not** stop something that can already
+  run code as the user. A hardened, independently-custodied vault is a cloud-backed problem
+  for later, not this phase's bar.
+- **Automations** ([`src/background/automations.ts`](src/background/automations.ts)) — pick
+  an interval or a daily time, and `chrome.alarms` (not `setInterval` — alarms survive both
+  the service worker being killed and a full browser restart) wakes the extension, opens the
+  flow's origin in a background tab, and runs it through the same replay engine used for a
+  manual run.
+- **Risk gating, enforced at schedule time and re-checked at run time:** a flow with any
+  `high` risk step (credential entry, a destructive click) can never be scheduled, full stop.
+  A flow with only `medium` checkpoints needs an explicit "auto-approve this flow's
+  checkpoints" opt-in — there's nobody present to click Approve. Scheduling is blocked until
+  every required secret has a vault entry.
+- Failures and skips (missing secret, flow deleted, no-longer-schedulable) show up as a
+  `chrome.notifications` alert and in the automation's run history in the dashboard.
+  Successful runs close their tab; failed ones stay open so you can see what broke.
+
 ## Selectors
 
 Semantic only, ranked best-first:
@@ -146,8 +175,10 @@ src/normalize/   raw → canonical events, then collapse into steps
 src/compile/     Flow JSON compiler, risk model, validator (F1..F11)
 src/replay/      selector resolution + step execution (content-side), orchestrator (worker-side)
 src/export/      SKILL.md, Playwright, JSON
-src/background/  MV3 service worker, chrome.storage persistence, replay orchestration
+src/background/  MV3 service worker, chrome.storage persistence, replay + automation orchestration, vault
 src/sidepanel/   React UI (record, library, run)
+src/dashboard/   React UI (full-tab: manage flows, secrets, automations)
+src/shared/      theme.css (shared design system), messages.ts (worker↔UI contract)
 spec/            the schema, versioned
 ```
 
@@ -157,3 +188,9 @@ Non-Chrome browsers, iframe recording, a sync backend, and anything cloud. The s
 room for all of them; none of them are wired. Replay's selector resolution is a heuristic
 (role lookup walks every element on the page) — fine for the pages tested against, not yet
 hardened against pathological DOM sizes.
+
+**Subscription billing.** eeveon-minutes already has a working RevenueCat + FastAPI gate
+(`saas.py`: webhook → `UserBillingStatus` → `require_active_user`) that a future gate here
+would extend rather than reinvent — deliberately not built yet. Nothing in the automation
+model needs reshaping to add it: a billing check slots in as one more condition in
+`automations.ts` before `chrome.alarms.create`.

@@ -5,7 +5,9 @@
  * (chrome.tabs.update); every other verb is delegated to the content script, which is the
  * only context with DOM access. Execution pauses before any step guarded by a checkpoint
  * and waits for an explicit approve/reject from the side panel — that pause is the whole
- * point of the risk model in compile/risk.ts.
+ * point of the risk model in compile/risk.ts. The one exception is `auto_approve_checkpoints`
+ * (src/types/replay.ts), set only by a scheduled automation that opted into it in advance;
+ * an interactive run never sets it.
  *
  * Known limitation: an MV3 service worker can be killed after ~30s with no pending
  * extension-API call in flight. A long `wait` step or a slow page can in theory stall a
@@ -39,6 +41,8 @@ export interface StartReplayInput {
   variables: Record<string, string>;
   /** Test-only override for STEP_PACE_MS. Production callers never set this. */
   pace_ms?: number;
+  /** Set by an automation that was scheduled with checkpoints explicitly opted in. */
+  auto_approve_checkpoints?: boolean;
 }
 
 export async function startReplay(input: StartReplayInput): Promise<ReplayState> {
@@ -60,6 +64,7 @@ export async function startReplay(input: StartReplayInput): Promise<ReplayState>
     error: null,
     pending_checkpoint: null,
     step_pace_ms: input.pace_ms ?? STEP_PACE_MS,
+    auto_approve_checkpoints: input.auto_approve_checkpoints ?? false,
   };
   await replayStore.writeReplayState(state);
   void run(flow, { skipCheckpointOnce: false }); // fire and forget; caller polls status
@@ -132,7 +137,7 @@ async function run(flow: FlowDocument, options: RunOptions): Promise<void> {
 
     const step = flow.steps[state.step_index]!;
     const checkpoint = flow.checkpoints.find((c) => c.before_step === step.step_id);
-    if (checkpoint && !skipCheckpointOnce) {
+    if (checkpoint && !skipCheckpointOnce && !state.auto_approve_checkpoints) {
       state.status = 'paused-approval';
       state.pending_checkpoint = toPending(checkpoint);
       await replayStore.writeReplayState(state);

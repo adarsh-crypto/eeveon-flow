@@ -10,11 +10,20 @@ import { compileFlow } from '../compile/compileFlow';
 import { validateFlow } from '../compile/validate';
 import * as store from './store';
 import * as replay from './replay';
+import * as vault from './vault';
+import * as automations from './automations';
 
 const MAX_EVENTS = 20_000;
 
 chrome.runtime.onInstalled.addListener(() => {
   void chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch(() => undefined);
+  void automations.reconcileAlarms();
+});
+
+// Alarms persist across a full browser restart, but this covers the (unlikely) case where
+// an alarm was somehow dropped without the automation being disabled.
+chrome.runtime.onStartup.addListener(() => {
+  void automations.reconcileAlarms();
 });
 
 chrome.runtime.onMessage.addListener((message: Message, sender, sendResponse) => {
@@ -149,6 +158,48 @@ async function handle(message: Message, sender: chrome.runtime.MessageSender): P
 
     case 'stop-replay':
       return { ok: true, replay: await replay.stopReplay() };
+
+    case 'vault-list':
+      return { ok: true, entries: await vault.listSecretMeta() };
+
+    case 'vault-store-secret':
+      await vault.storeSecret(message.flow_id, message.variable, message.value);
+      return { ok: true };
+
+    case 'vault-delete-secret':
+      await vault.deleteSecret(message.flow_id, message.variable);
+      return { ok: true };
+
+    case 'automation-can-schedule': {
+      const flow = await store.readFlow(message.flow_id);
+      if (!flow) return { ok: false, error: 'flow not found' };
+      const check = await automations.canSchedule(flow, message.auto_approve_checkpoints);
+      return { ok: true, can_schedule: check.ok, reason: check.reason };
+    }
+
+    case 'automation-create': {
+      try {
+        const automation = await automations.createAutomation(message);
+        return { ok: true, automation };
+      } catch (error) {
+        return { ok: false, error: error instanceof Error ? error.message : String(error) };
+      }
+    }
+
+    case 'automation-set-enabled': {
+      const automation = await automations.setAutomationEnabled(message.automation_id, message.enabled);
+      return { ok: true, automation };
+    }
+
+    case 'automation-delete':
+      await automations.deleteAutomation(message.automation_id);
+      return { ok: true };
+
+    case 'automation-list':
+      return { ok: true, automations: await automations.listAutomations() };
+
+    case 'automation-list-runs':
+      return { ok: true, runs: await automations.listRuns(message.automation_id) };
 
     case 'run-step':
       // Sent by the background to a tab's content script via chrome.tabs.sendMessage;

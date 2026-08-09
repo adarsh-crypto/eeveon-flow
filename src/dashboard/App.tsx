@@ -6,6 +6,8 @@ import { exportFlow, type ExportFormat } from '../export';
 import { downloadArtifact } from '../shared/download';
 import RunPanel from '../sidepanel/RunPanel';
 import TabPicker from './TabPicker';
+import VaultSection from './VaultSection';
+import AutomationSection from './AutomationSection';
 
 async function send(message: Message): Promise<Response> {
   return (await chrome.runtime.sendMessage(message)) as Response;
@@ -215,7 +217,12 @@ export default function App() {
                 </button>
               </div>
 
+              <VaultSection flow={selected} key={`vault:${selected.flow_id}`} />
+
+              <AutomationSection flow={selected} key={`automation:${selected.flow_id}`} />
+
               <div className="run-section">
+                <h2>Run once</h2>
                 <TabPicker value={tabId} onChange={setTabId} />
                 {tabId !== null ? (
                   <RunPanel flow={selected} tabId={tabId} key={`${selected.flow_id}:${tabId}`} />

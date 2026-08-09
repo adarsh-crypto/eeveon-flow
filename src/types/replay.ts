@@ -31,4 +31,11 @@ export interface ReplayState {
   pending_checkpoint: PendingCheckpoint | null;
   /** Pause after each non-navigate step, so a human watching the tab can follow along. */
   step_pace_ms: number;
+  /**
+   * When true, checkpoints are logged and passed instead of pausing for a human. Only ever
+   * set by an automation (src/background/automations.ts) on a flow that had no `high` risk
+   * steps and whose checkpoints were explicitly opted into at schedule time — an
+   * interactive run from the side panel/dashboard never sets this.
+   */
+  auto_approve_checkpoints: boolean;
 }

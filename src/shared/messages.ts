@@ -3,6 +3,13 @@ import type { RawEvent } from '../types/capture';
 import type { FlowDocument } from '../types/flow';
 import type { ReplayActionPayload, StepResult } from '../replay/actionPayload';
 import type { ReplayState } from '../types/replay';
+import type { Automation, AutomationRun, AutomationSchedule } from '../types/automation';
+
+export interface VaultEntryMeta {
+  flow_id: string;
+  variable: string;
+  created_at: string;
+}
 
 export interface RecordingStatus {
   recording: boolean;
@@ -40,6 +47,23 @@ export type Message =
   | { kind: 'approve-checkpoint' }
   | { kind: 'reject-checkpoint' }
   | { kind: 'stop-replay' }
+  // panel/dashboard → worker: vault
+  | { kind: 'vault-list' }
+  | { kind: 'vault-store-secret'; flow_id: string; variable: string; value: string }
+  | { kind: 'vault-delete-secret'; flow_id: string; variable: string }
+  // panel/dashboard → worker: automations
+  | { kind: 'automation-can-schedule'; flow_id: string; auto_approve_checkpoints: boolean }
+  | {
+      kind: 'automation-create';
+      flow_id: string;
+      name: string;
+      schedule: AutomationSchedule;
+      auto_approve_checkpoints: boolean;
+    }
+  | { kind: 'automation-set-enabled'; automation_id: string; enabled: boolean }
+  | { kind: 'automation-delete'; automation_id: string }
+  | { kind: 'automation-list' }
+  | { kind: 'automation-list-runs'; automation_id: string }
   // worker → content: replay
   | { kind: 'run-step'; payload: ReplayActionPayload };
 
@@ -49,6 +73,11 @@ export type Response =
   | { ok: true; flow: FlowDocument }
   | { ok: true; flows: SavedFlowSummary[] }
   | { ok: true; replay: ReplayState | null }
+  | { ok: true; entries: VaultEntryMeta[] }
+  | { ok: true; can_schedule: boolean; reason: string | null }
+  | { ok: true; automation: Automation }
+  | { ok: true; automations: Automation[] }
+  | { ok: true; runs: AutomationRun[] }
   | { ok: true }
   | { ok: false; error: string };
 

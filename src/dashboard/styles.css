@@ -218,12 +218,145 @@ h2 {
   gap: 0.6rem;
 }
 
-.run-section {
+.run-section,
+.vault-section,
+.automation-section {
   padding-top: 0.5rem;
   border-top: 1px solid var(--border);
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
+}
+
+.vault-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.vault-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 0.65rem;
+}
+
+.vault-row-label {
+  font-weight: 500;
+  min-width: 8rem;
+}
+
+.vault-row input {
+  flex: 1;
+  min-width: 8rem;
+}
+
+.automation-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.automation-item {
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 0.65rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.automation-item-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.automation-name {
+  font-weight: 500;
+}
+
+.automation-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.automation-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.run-history {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem 0 0;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.run-history-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.run-history-error .pill {
+  color: var(--error);
+  border-color: color-mix(in oklch, var(--error) 45%, transparent);
+}
+
+.run-history-skipped .pill {
+  color: var(--warning);
+  border-color: color-mix(in oklch, var(--warning) 45%, transparent);
+}
+
+.automation-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  padding: 0.9rem;
+  border: 1px dashed var(--border);
+  border-radius: 0.75rem;
+}
+
+.schedule-kind {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.82rem;
+}
+
+.schedule-kind label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.daily-time {
+  display: flex;
+  gap: 0.8rem;
+}
+
+.auto-approve-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
 }
 
 .tab-picker {
