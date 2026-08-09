@@ -1,0 +1,260 @@
+/**
+ * The EEVEON design system — lifted from eeveon-frontend/styles/tokens.css so every
+ * EEVEON surface (marketing site, dashboard, side panel) reads as one product. Same OKLCH
+ * palette, same Geist fonts (self-hosted here — an extension page can't reach next/font's
+ * CDN-backed loader), same pill buttons and soft shadows. Change the values here, not per
+ * page, or the two products will drift apart the way they're designed not to.
+ */
+
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/Geist-Variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Geist Mono';
+  src: url('/fonts/GeistMono-Variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: light;
+  --background: oklch(96.8% 0.012 80);
+  --background-soft: oklch(94.2% 0.014 78);
+  --surface: oklch(98.3% 0.009 80);
+  --surface-elevated: oklch(99.1% 0.006 82);
+  --surface-recessed: oklch(91.5% 0.014 76);
+  --text-primary: oklch(18% 0.008 65);
+  --text-secondary: oklch(36% 0.008 65);
+  --text-muted: oklch(52% 0.007 65);
+  --accent: oklch(18% 0.008 65);
+  --accent-contrast: oklch(96.8% 0.012 80);
+  --accent-soft: oklch(86% 0.012 78);
+  --border: oklch(18% 0.006 65 / 0.12);
+  --border-strong: oklch(18% 0.006 65 / 0.22);
+  --glow: oklch(18% 0.006 65 / 0.12);
+  --glass: oklch(98.3% 0.009 80 / 0.76);
+  --overlay: oklch(12% 0.006 65 / 0.54);
+  --overlay-soft: oklch(12% 0.006 65 / 0.075);
+  --success: oklch(42% 0.006 65);
+  --warning: oklch(55% 0.006 65);
+  --error: oklch(30% 0.006 65);
+  --shadow-color: oklch(13% 0.006 65 / 0.12);
+  --shadow-low: 0 12px 40px var(--shadow-color);
+  --shadow-high: 0 30px 90px var(--shadow-color);
+  --radius-small: 14px;
+  --radius-medium: 24px;
+  --radius-large: 36px;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.45, 0, 0.15, 1);
+  --font-sans: 'Geist', ui-sans-serif, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --background: oklch(14.5% 0.006 65);
+    --background-soft: oklch(17% 0.006 65);
+    --surface: oklch(19% 0.006 65);
+    --surface-elevated: oklch(23% 0.006 65);
+    --surface-recessed: oklch(12.5% 0.005 65);
+    --text-primary: oklch(93.5% 0.012 80);
+    --text-secondary: oklch(76% 0.009 78);
+    --text-muted: oklch(63% 0.008 75);
+    --accent: oklch(93.5% 0.012 80);
+    --accent-contrast: oklch(14.5% 0.006 65);
+    --accent-soft: oklch(30% 0.007 70);
+    --border: oklch(94% 0.009 80 / 0.1);
+    --border-strong: oklch(94% 0.009 80 / 0.2);
+    --glow: oklch(94% 0.009 80 / 0.1);
+    --glass: oklch(18% 0.006 65 / 0.8);
+    --overlay: oklch(5% 0.004 65 / 0.68);
+    --overlay-soft: oklch(100% 0 0 / 0.045);
+    --success: oklch(72% 0.008 78);
+    --warning: oklch(62% 0.007 75);
+    --error: oklch(82% 0.009 80);
+    --shadow-color: oklch(3% 0.004 65 / 0.38);
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --background: oklch(14.5% 0.006 65);
+  --background-soft: oklch(17% 0.006 65);
+  --surface: oklch(19% 0.006 65);
+  --surface-elevated: oklch(23% 0.006 65);
+  --surface-recessed: oklch(12.5% 0.005 65);
+  --text-primary: oklch(93.5% 0.012 80);
+  --text-secondary: oklch(76% 0.009 78);
+  --text-muted: oklch(63% 0.008 75);
+  --accent: oklch(93.5% 0.012 80);
+  --accent-contrast: oklch(14.5% 0.006 65);
+  --accent-soft: oklch(30% 0.007 70);
+  --border: oklch(94% 0.009 80 / 0.1);
+  --border-strong: oklch(94% 0.009 80 / 0.2);
+  --glow: oklch(94% 0.009 80 / 0.1);
+  --glass: oklch(18% 0.006 65 / 0.8);
+  --overlay: oklch(5% 0.004 65 / 0.68);
+  --overlay-soft: oklch(100% 0 0 / 0.045);
+  --success: oklch(72% 0.008 78);
+  --warning: oklch(62% 0.007 75);
+  --error: oklch(82% 0.009 80);
+  --shadow-color: oklch(3% 0.004 65 / 0.38);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--background);
+}
+
+body {
+  margin: 0;
+  color: var(--text-primary);
+  background: var(--background);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  color: var(--accent-contrast);
+  background: var(--accent);
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+/** Small uppercase mono label — used throughout eeveon-frontend for eyebrow text. */
+.label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.button {
+  min-height: 2.75rem;
+  padding: 0 1.1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition:
+    transform 0.28s var(--ease-out),
+    background-color 0.28s var(--ease-soft),
+    box-shadow 0.28s var(--ease-soft),
+    border-color 0.28s var(--ease-soft);
+}
+
+.button:hover {
+  border-color: var(--border-strong);
+  background: var(--surface);
+}
+
+.button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.button-primary {
+  color: var(--accent-contrast);
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 12px 34px var(--glow);
+}
+
+.button-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 42px var(--glow);
+  background: var(--accent);
+}
+
+.button-danger {
+  color: var(--error);
+  border-color: var(--border);
+}
+
+.button-danger:hover {
+  border-color: var(--error);
+  background: var(--surface);
+}
+
+.card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-medium);
+  background: var(--surface);
+  box-shadow: var(--shadow-low);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.pill-low {
+  color: var(--text-muted);
+}
+
+.pill-medium {
+  color: var(--warning);
+  border-color: color-mix(in oklch, var(--warning) 40%, transparent);
+}
+
+.pill-high {
+  color: var(--error);
+  border-color: color-mix(in oklch, var(--error) 40%, transparent);
+}
+
+input[type='text'],
+input[type='password'],
+input[type='search'],
+textarea,
+select {
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.65rem;
+  background: var(--surface);
+  color: var(--text-primary);
+}
+
+input[type='text']:focus,
+input[type='password']:focus,
+select:focus {
+  outline: none;
+  border-color: var(--border-strong);
+}

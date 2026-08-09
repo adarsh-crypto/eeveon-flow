@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "EEVEON Flow",
+  "version": "0.1.0",
+  "description": "Record a browser workflow and export it as portable Flow JSON, a SKILL.md, or a Playwright spec. Local only.",
+  "minimum_chrome_version": "116",
+  "background": {
+    "service_worker": "service-worker.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "EEVEON Flow"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "permissions": ["storage", "sidePanel", "scripting", "tabs", "webNavigation", "downloads"],
+  "host_permissions": ["http://*/*", "https://*/*"]
+}

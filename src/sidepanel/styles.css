@@ -1,0 +1,279 @@
+/* Layout for the compact side panel. Palette, fonts, buttons, cards, pills all come from
+   ../shared/theme.css — this file only arranges the panel's own elements. */
+
+body {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.panel {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.brand-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.brand-mark {
+  width: 1.6rem;
+  height: 1.6rem;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 0.5rem;
+  color: var(--accent-contrast);
+  background: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  box-shadow: 0 0 18px var(--glow);
+}
+
+h1 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+h2 {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin: 0 0 8px;
+  font-weight: 500;
+}
+
+.tagline {
+  margin: 1px 0 0;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.dashboard-link {
+  min-height: 2rem;
+  padding: 0 0.75rem;
+  font-size: 11px;
+}
+
+.recorder .button-primary {
+  width: 100%;
+}
+
+.button-primary.stop {
+  color: var(--accent-contrast);
+  background: var(--error);
+  border-color: var(--error);
+}
+
+button.link {
+  border: 0;
+  background: none;
+  padding: 0;
+  min-height: auto;
+  color: var(--text-primary);
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-weight: 400;
+}
+
+button.link.danger {
+  color: var(--error);
+  font-size: 11px;
+}
+
+.rec-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--error);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+.error {
+  color: var(--error);
+  margin: 8px 0 0;
+  font-size: 12px;
+}
+
+.meta,
+.empty {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.violations {
+  margin: 8px 0;
+  padding: 8px 8px 8px 22px;
+  border-left: 2px solid var(--warning);
+  background: color-mix(in oklch, var(--warning) 10%, transparent);
+  border-radius: 0 0.5rem 0.5rem 0;
+  font-size: 11px;
+}
+
+.steps {
+  margin: 10px 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.steps li {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.verb {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 1px 6px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-muted);
+}
+
+.risk-medium .verb {
+  border-color: color-mix(in oklch, var(--warning) 45%, transparent);
+  color: var(--warning);
+}
+
+.risk-high .verb {
+  border-color: color-mix(in oklch, var(--error) 45%, transparent);
+  color: var(--error);
+}
+
+.fold {
+  color: var(--text-muted);
+  font-size: 10px;
+}
+
+.exports {
+  display: flex;
+  gap: 6px;
+}
+
+.exports .button {
+  flex: 1;
+  font-size: 11px;
+  min-height: 2.25rem;
+  padding: 0 0.5rem;
+}
+
+.library ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.library li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2px 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+}
+
+.run-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.run-input {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.run-input input {
+  width: 100%;
+}
+
+.checkpoint {
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid color-mix(in oklch, var(--warning) 45%, transparent);
+  border-radius: 0.65rem;
+  background: color-mix(in oklch, var(--warning) 10%, transparent);
+}
+
+.checkpoint p {
+  margin: 0 0 8px;
+  font-size: 12px;
+}
+
+.checkpoint-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.checkpoint-actions .button {
+  flex: 1;
+}
+
+.run-steps {
+  margin-top: 10px;
+}
+
+.run-steps li {
+  flex-wrap: wrap;
+}
+
+.run-steps .run-ok .verb {
+  border-color: color-mix(in oklch, var(--success) 45%, transparent);
+  color: var(--success);
+}
+
+.run-steps .run-error .verb {
+  border-color: color-mix(in oklch, var(--error) 45%, transparent);
+  color: var(--error);
+}
+
+.run-steps .run-current {
+  font-weight: 600;
+}
+
+.run-error-msg {
+  flex-basis: 100%;
+  color: var(--error);
+  font-size: 10px;
+}

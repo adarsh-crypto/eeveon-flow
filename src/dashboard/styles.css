@@ -1,0 +1,309 @@
+/* Layout for the full-tab dashboard. Palette, fonts, buttons, cards, pills come from
+   ../shared/theme.css — this file only arranges the dashboard's own elements. */
+
+body {
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.dashboard {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: clamp(1.5rem, 3vw, 3rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.dash-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.brand-mark {
+  width: 2.25rem;
+  height: 2.25rem;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 0.65rem;
+  color: var(--accent-contrast);
+  background: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  box-shadow: 0 0 24px var(--glow);
+}
+
+h1 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+h2 {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin: 0 0 0.75rem;
+}
+
+.tagline {
+  margin: 0.1rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+.error {
+  color: var(--error);
+  font-size: 0.85rem;
+}
+
+.notice {
+  color: var(--success);
+  font-size: 0.85rem;
+}
+
+.empty {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.meta {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+.dash-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .dash-body {
+    grid-template-columns: 1fr;
+  }
+}
+
+.flow-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.flow-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.3rem;
+  padding: 0.9rem 1rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.flow-card-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.flow-card-active {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-high);
+}
+
+.flow-detail {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: 20rem;
+}
+
+.detail-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.rename-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.rename-row input[type='text'] {
+  flex: 1;
+  min-width: 10rem;
+}
+
+.flow-title {
+  font-size: 1.3rem;
+  font-weight: 500;
+  margin: 0;
+  letter-spacing: -0.01em;
+  flex: 1;
+}
+
+.violations {
+  margin: 0;
+  padding: 0.6rem 0.6rem 0.6rem 1.4rem;
+  border-left: 2px solid var(--warning);
+  background: color-mix(in oklch, var(--warning) 10%, transparent);
+  border-radius: 0 0.6rem 0.6rem 0;
+  font-size: 0.78rem;
+}
+
+.steps {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-height: 20rem;
+  overflow-y: auto;
+}
+
+.steps li {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 0.65rem;
+  font-size: 0.82rem;
+}
+
+.verb {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  padding: 0.1rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-muted);
+}
+
+.risk-medium .verb {
+  border-color: color-mix(in oklch, var(--warning) 45%, transparent);
+  color: var(--warning);
+}
+
+.risk-high .verb {
+  border-color: color-mix(in oklch, var(--error) 45%, transparent);
+  color: var(--error);
+}
+
+.fold {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+}
+
+.exports {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.run-section {
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.tab-picker {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.tab-picker label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  flex: 1;
+  min-width: 14rem;
+}
+
+.tab-picker select {
+  width: 100%;
+}
+
+/* RunPanel is shared with the side panel; these rules give it dashboard-appropriate sizing. */
+.run-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.run-input {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.checkpoint {
+  padding: 0.8rem;
+  border: 1px solid color-mix(in oklch, var(--warning) 45%, transparent);
+  border-radius: 0.75rem;
+  background: color-mix(in oklch, var(--warning) 10%, transparent);
+}
+
+.checkpoint p {
+  margin: 0 0 0.6rem;
+  font-size: 0.85rem;
+}
+
+.checkpoint-actions {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.run-steps {
+  max-height: 16rem;
+}
+
+.run-steps .run-ok .verb {
+  border-color: color-mix(in oklch, var(--success) 45%, transparent);
+  color: var(--success);
+}
+
+.run-steps .run-error .verb {
+  border-color: color-mix(in oklch, var(--error) 45%, transparent);
+  color: var(--error);
+}
+
+.run-steps .run-current {
+  font-weight: 600;
+}
+
+.run-error-msg {
+  flex-basis: 100%;
+  color: var(--error);
+  font-size: 0.72rem;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--error);
+}
